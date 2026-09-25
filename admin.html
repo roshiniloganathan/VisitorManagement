@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — JJCET Visitor Management</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR (always visible) ═══════════════ -->
+<nav class="navbar" role="navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JJ</div>
+      <div class="nav-title-block">
+        <div class="nav-college-name">J.J. College of Engineering &amp; Technology</div>
+        <div class="nav-subtitle">Admin Panel</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"       class="nav-link">🔍 Find Person</a>
+      <a href="visitor-log.html" class="nav-link">📋 Visitor Log</a>
+      <span class="nav-link active">⚙️ Admin</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<div class="admin-login" id="adminLogin">
+  <div class="login-card">
+
+    <div class="login-logo">JJ</div>
+    <h2 class="login-title">Admin Login</h2>
+    <p class="login-desc">Enter the admin password to manage staff presence and locations.</p>
+
+    <form class="login-form" id="loginForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="adminPassword">Admin Password</label>
+        <input
+          type="password"
+          id="adminPassword"
+          class="form-input"
+          placeholder="Enter password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+        🔓 Login to Admin Panel
+      </button>
+    </form>
+
+    <p style="margin-top:20px;font-size:0.75rem;color:var(--text-muted);">
+      Default password: <code style="background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;">jjcet@admin</code>
+    </p>
+
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
+      <a href="index.html" class="btn btn-outline" style="width:100%;justify-content:center;">
+        ← Back to Visitor Search
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ ADMIN PANEL ═══════════════ -->
+<div id="adminPanel" class="admin-panel">
+
+  <!-- Toolbar -->
+  <div class="admin-toolbar">
+    <div class="toolbar-title">
+      ⚙️ Staff Management
+      <span class="badge-count" id="staffCount">0</span>
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-outline btn-sm" onclick="resetStaffData()">🔄 Reset to Default</button>
+      <button class="btn btn-outline btn-sm" id="exportBtn">⬇️ Export Visitors</button>
+      <button class="btn btn-primary btn-sm" id="addStaffBtn">➕ Add Staff</button>
+      <button class="btn btn-danger btn-sm" id="logoutBtn">🔒 Logout</button>
+    </div>
+  </div>
+
+  <!-- Instructions Banner -->
+  <div style="background:rgba(108,99,255,0.08);border-bottom:1px solid rgba(108,99,255,0.15);padding:14px 24px;">
+    <div style="max-width:1200px;margin:0 auto;font-size:0.82rem;color:var(--primary-light);">
+      💡 <strong>Tip:</strong> Change status or location directly on each card. Changes are saved automatically when you click away (or press Enter).
+    </div>
+  </div>
+
+  <!-- Staff Grid -->
+  <div class="admin-content">
+    <div class="admin-grid" id="adminGrid"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ADD STAFF MODAL ═══════════════ -->
+<div class="modal-overlay" id="addStaffModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <h3 class="modal-title" id="modalTitle">➕ Add New Staff Member</h3>
+    <p class="modal-desc">Fill in the details to add a new faculty or staff member to the directory.</p>
+
+    <form class="modal-form" id="modalForm" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="newName">Full Name <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="newName" class="form-input" placeholder="e.g. Dr. R. Anandhan" required />
+      </div>
+
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="form-group">
+          <label class="form-label" for="newDesignation">Designation <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="newDesignation" class="form-input" placeholder="e.g. Associate Professor" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newDepartment">Department <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="newDepartment" class="form-input" placeholder="e.g. Computer Science & Engineering" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="newLocation">Current Location <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="newLocation" class="form-input" placeholder="e.g. Class Room 18, CSE Block" required />
+      </div>
+
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="form-group">
+          <label class="form-label" for="newPhone">Phone / Ext.</label>
+          <input type="text" id="newPhone" class="form-input" placeholder="e.g. Ext. 205" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newStatus">Initial Status</label>
+          <select id="newStatus" class="form-select">
+            <option value="present">✅ Present</option>
+            <option value="absent">🚫 Absent</option>
+            <option value="leave">🏖️ On Leave</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="modalCancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">➕ Add Staff Member</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <p class="footer-text">
+    &copy; 2026 <span>J.J. College of Engineering &amp; Technology</span>, Trichy.
+    All rights reserved. &nbsp;|&nbsp; Admin Panel
+  </p>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
