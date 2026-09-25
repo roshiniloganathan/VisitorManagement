@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visitor Log — JJCET</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav class="navbar" role="navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">JJ</div>
+      <div class="nav-title-block">
+        <div class="nav-college-name">J.J. College of Engineering &amp; Technology</div>
+        <div class="nav-subtitle">Visitor Management System</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"       class="nav-link">🔍 Find Person</a>
+      <a href="visitor-log.html" class="nav-link active">📋 Visitor Log</a>
+      <a href="admin.html"       class="nav-btn">⚙️ Admin</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ PAGE HEADER ═══════════════ -->
+<section class="page-header">
+  <div class="page-header-inner">
+    <div class="page-title-row">
+      <div>
+        <h1 class="page-title">📋 <span class="text-gradient">Visitor Log</span></h1>
+        <p class="page-desc">Register your visit and keep a record of who's on campus today.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="exportCSV()">⬇️ Export CSV</button>
+        <a href="index.html" class="btn btn-primary">🔍 Find a Person</a>
+      </div>
+    </div>
+    <p id="todayLabel" style="font-size:0.82rem;color:var(--text-muted);margin-top:8px;"></p>
+  </div>
+</section>
+
+<!-- ═══════════════ REGISTRATION FORM ═══════════════ -->
+<section class="form-section">
+  <div class="form-card">
+    <div class="form-title">
+      <div class="form-icon">🪪</div>
+      Register Your Visit
+    </div>
+
+    <form id="visitorForm" novalidate>
+      <div class="form-grid">
+
+        <!-- Visitor Name -->
+        <div class="form-group">
+          <label class="form-label" for="visitorName">Visitor Name <span style="color:var(--danger)">*</span></label>
+          <input
+            type="text"
+            id="visitorName"
+            class="form-input"
+            placeholder="Your full name"
+            required
+            autocomplete="name"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone Number <span style="color:var(--danger)">*</span></label>
+          <input
+            type="tel"
+            id="phone"
+            class="form-input"
+            placeholder="10-digit mobile number"
+            maxlength="10"
+            required
+          />
+        </div>
+
+        <!-- Person to Meet -->
+        <div class="form-group">
+          <label class="form-label" for="meetingPerson">Person to Meet <span style="color:var(--danger)">*</span></label>
+          <select id="meetingPerson" class="form-select" required>
+            <option value="" disabled selected>Select a staff member</option>
+          </select>
+        </div>
+
+        <!-- Purpose -->
+        <div class="form-group">
+          <label class="form-label" for="purpose">Purpose of Visit <span style="color:var(--danger)">*</span></label>
+          <select id="purpose" class="form-select" required>
+            <option value="" disabled selected>Select purpose</option>
+            <option>Academic / Project Guidance</option>
+            <option>Job / Placement Enquiry</option>
+            <option>Administrative Work</option>
+            <option>Fee Related</option>
+            <option>Research Collaboration</option>
+            <option>Personal / Family</option>
+            <option>Interview</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group full">
+          <label class="form-label" for="address">Address / Organization <span style="color:var(--text-muted);font-weight:400;">(Optional)</span></label>
+          <input
+            type="text"
+            id="address"
+            class="form-input"
+            placeholder="Your address or organization name"
+          />
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" id="clearBtn">✕ Clear</button>
+        <button type="submit" class="btn btn-primary">✅ Register Visit</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════════ VISITOR TABLE ═══════════════ -->
+<section class="table-section" id="tableSection">
+  <div class="table-card">
+
+    <div class="table-header">
+      <div class="table-title">
+        🗒️ Today's Visitor Log
+        <span class="badge-count" id="visitorCount">0</span>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="exportCSV()">⬇️ Export</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Visitor Name</th>
+            <th>Phone</th>
+            <th>Meeting</th>
+            <th>Purpose</th>
+            <th>Time In</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="visitorTbody">
+          <tr>
+            <td colspan="6" class="table-empty">No visitor entries yet. Register a visit above!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <p class="footer-text">
+    &copy; 2026 <span>J.J. College of Engineering &amp; Technology</span>, Trichy.
+    All rights reserved. &nbsp;|&nbsp; Visitor Management System
+  </p>
+</footer>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="js/data.js"></script>
+<script src="js/log.js"></script>
+</body>
+</html>
